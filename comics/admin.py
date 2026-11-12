@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Comic, Editorial, Reserva
+
+
+admin.site.register(Editorial)
+admin.site.register(Comic)
+admin.site.register(Reserva)
