@@ -86,7 +86,9 @@
                              alt="{{ comic.titulo }}">
                     {% endif %}
 
-                    <h2>{{ comic.titulo }}</h2>
+                    <a href="{% url 'detalle_comic' comic.id %}">
+                        <h2>{{ comic.titulo }}</h2>
+                    </a>
                     <p>{{ comic.editorial.nombre }}</p>
                     <p>Tomo {{ comic.numero_tomo }}</p>
 
