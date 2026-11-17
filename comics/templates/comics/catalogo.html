@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tienda de Cómics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+        }
+        header {
+            background: #292929;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        input, select, button {
+            padding: 10px;
+        }
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .comic {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+        .comic img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+        }
+        .precio {
+            color: #087b46;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tienda de Cómics</h1>
+        <p>Encuentra tu próximo cómic favorito</p>
+    </header>
+
+    <main>
+        <form method="get" class="filtros">
+            <input type="text" name="buscar"
+                   placeholder="Buscar por título"
+                   value="{{ busqueda }}">
+
+            <select name="editorial">
+                <option value="">Todas las editoriales</option>
+                {% for editorial in editoriales %}
+                    <option value="{{ editorial.id }}"
+                        {% if editorial_seleccionada == editorial.id|stringformat:"s" %}selected{% endif %}>
+                        {{ editorial.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div class="catalogo">
+            {% for comic in comics %}
+                <article class="comic">
+                    {% if comic.imagen_portada %}
+                        <img src="{{ comic.imagen_portada.url }}"
+                             alt="{{ comic.titulo }}">
+                    {% endif %}
+
+                    <h2>{{ comic.titulo }}</h2>
+                    <p>{{ comic.editorial.nombre }}</p>
+                    <p>Tomo {{ comic.numero_tomo }}</p>
+
+                    <p class="precio">
+                        ${{ comic.precio|floatformat:0 }}
+                    </p>
+
+                    {% if comic.stock == 0 %}
+                        <strong>Agotado</strong>
+                    {% else %}
+                        <p>Stock: {{ comic.stock }}</p>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p>No se encontraron cómics disponibles.</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
