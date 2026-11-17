@@ -1,5 +1,9 @@
+
 from django.shortcuts import render, get_object_or_404
+from django.db import transaction
+
 from .models import Comic, Editorial
+from .forms import ReservaForm
 
 
 def catalogo(request):
@@ -33,4 +37,22 @@ def detalle_comic(request, comic_id):
 
     return render(request, 'comics/detalle.html', {
         'comic': comic
+    })
+
+
+def reservar_comic(request, comic_id):
+    comic = get_object_or_404(
+        Comic,
+        id=comic_id,
+        disponible=True
+    )
+
+    if request.method == 'POST':
+        formulario = ReservaForm(request.POST)
+    else:
+        formulario = ReservaForm()
+
+    return render(request, 'comics/reservar.html', {
+        'comic': comic,
+        'formulario': formulario,
     })

@@ -1,0 +1,106 @@
+
+{% extends 'comics/base.html' %}
+{% load formato %}
+
+{% block titulo %}Reservar {{ comic.titulo }}{% endblock %}
+
+{% block estilos %}
+<style>
+    .reserva {
+        background: white;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px #ddd;
+    }
+
+    .reserva h2 {
+        margin-top: 0;
+    }
+
+    .campo {
+        margin-bottom: 18px;
+    }
+
+    .campo label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+
+    .campo input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+    }
+
+    .errores {
+        color: #b71c1c;
+        margin-top: 5px;
+    }
+
+    .boton {
+        background: #087b46;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .boton:hover {
+        background: #065c34;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="reserva">
+    <h2>Reservar {{ comic.titulo }}</h2>
+
+    <p><strong>Editorial:</strong> {{ comic.editorial.nombre }}</p>
+    <p><strong>Precio:</strong> {{ comic.precio|pesos_chilenos }}</p>
+    <p><strong>Stock disponible:</strong> {{ comic.stock }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for campo in formulario %}
+            <div class="campo">
+                <label for="{{ campo.id_for_label }}">
+                    {{ campo.label }}
+                </label>
+
+                {{ campo }}
+
+                {% if campo.errors %}
+                    <div class="errores">
+                        {{ campo.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if formulario.non_field_errors %}
+            <div class="errores">
+                {{ formulario.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="boton">
+            Confirmar reserva
+        </button>
+    </form>
+
+    <p>
+        <a href="{% url 'detalle_comic' comic.id %}">
+            Volver al cómic
+        </a>
+    </p>
+</div>
+
+{% endblock %}
