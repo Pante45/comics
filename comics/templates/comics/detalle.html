@@ -1,83 +1,81 @@
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ comic.titulo }} - Tienda de Cómics</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            margin: 0;
-        }
-        header {
-            background: #292929;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        main {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            display: flex;
-            gap: 30px;
-        }
-        img {
-            width: 280px;
-            object-fit: contain;
-        }
-        .precio {
-            color: green;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        @media (max-width: 650px) {
-            main { flex-direction: column; }
-            img { max-width: 100%; }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Tienda de Cómics</h1>
-    </header>
+{% extends 'comics/base.html' %}
+{% load formato %}
 
-    <main>
-        {% if comic.imagen_portada %}
-            <img src="{{ comic.imagen_portada.url }}"
-                 alt="{{ comic.titulo }}">
+{% block titulo %}{{ comic.titulo }} - Tienda de Cómics{% endblock %}
+
+{% block estilos %}
+<style>
+    .detalle {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        display: flex;
+        gap: 30px;
+    }
+
+    .detalle img {
+        width: 280px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .detalle-info {
+        flex: 1;
+    }
+
+    .agotado {
+        color: #c62828;
+        font-weight: bold;
+    }
+
+    @media (max-width: 650px) {
+        .detalle {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="detalle">
+
+    {% if comic.imagen_portada %}
+        <img src="{{ comic.imagen_portada.url }}"
+             alt="{{ comic.titulo }}">
+    {% endif %}
+
+    <section class="detalle-info">
+        <h2>{{ comic.titulo }}</h2>
+
+        <p><strong>Editorial:</strong> {{ comic.editorial.nombre }}</p>
+
+        <p><strong>Número de tomo:</strong> {{ comic.numero_tomo }}</p>
+
+        <p><strong>Tapa dura:</strong>
+            {% if comic.tapa_dura %}Sí{% else %}No{% endif %}
+        </p>
+
+        <p><strong>Stock:</strong> {{ comic.stock }}</p>
+
+        <p><strong>Disponible:</strong>
+            {% if comic.disponible %}Sí{% else %}No{% endif %}
+        </p>
+
+        <p class="precio">
+            {{ comic.precio|pesos_chilenos }}
+        </p>
+
+        {% if comic.stock == 0 %}
+            <p class="agotado">Agotado</p>
+        {% else %}
+            <p>Disponible para reservar</p>
         {% endif %}
 
-        <section>
-            <h1>{{ comic.titulo }}</h1>
+        <a href="{% url 'catalogo' %}">Volver al catálogo</a>
+    </section>
 
-            <p><strong>Editorial:</strong> {{ comic.editorial.nombre }}</p>
-            <p><strong>Número de tomo:</strong> {{ comic.numero_tomo }}</p>
+</div>
 
-            <p><strong>Tapa dura:</strong>
-                {% if comic.tapa_dura %}Sí{% else %}No{% endif %}
-            </p>
-
-            <p><strong>Stock:</strong> {{ comic.stock }}</p>
-
-            <p><strong>Disponible:</strong>
-                {% if comic.disponible %}Sí{% else %}No{% endif %}
-            </p>
-
-            <p class="precio">${{ comic.precio|floatformat:0 }}</p>
-
-            {% if comic.stock == 0 %}
-                <h3>Agotado</h3>
-            {% else %}
-                <p>Disponible para reservar</p>
-            {% endif %}
-
-            <a href="{% url 'catalogo' %}">Volver al catálogo</a>
-        </section>
-    </main>
-</body>
-</html>
+{% endblock %}
