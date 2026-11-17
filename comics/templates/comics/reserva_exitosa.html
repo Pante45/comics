@@ -1,0 +1,36 @@
+
+{% extends 'comics/base.html' %}
+{% load formato %}
+
+{% block titulo %}Reserva realizada{% endblock %}
+
+{% block contenido %}
+
+<div style="background:white; padding:30px; border-radius:10px; max-width:650px; margin:auto;">
+
+    <h2>¡Reserva realizada correctamente!</h2>
+
+    <p>Tu reserva fue registrada.</p>
+
+    <p><strong>Código:</strong> {{ reserva.codigo }}</p>
+
+    <p><strong>Cómic:</strong> {{ reserva.comic.titulo }}</p>
+
+    <p><strong>Nombre:</strong> {{ reserva.nombre }}</p>
+
+    <p><strong>RUT:</strong> {{ reserva.rut }}</p>
+
+    <p><strong>Cantidad:</strong> {{ reserva.cantidad }}</p>
+
+    <p><strong>Total:</strong> {{ total|pesos_chilenos }}</p>
+
+    <p>
+        <strong>Fecha:</strong>
+        {{ reserva.fecha_reserva|date:"d/m/Y H:i" }}
+    </p>
+
+    <a href="{% url 'catalogo' %}">Volver al catálogo</a>
+
+</div>
+
+{% endblock %}
