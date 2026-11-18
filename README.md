@@ -6,6 +6,11 @@ La aplicación fue desarrollada con Django y permite visualizar un catálogo de 
 
 También cuenta con un panel de administración para gestionar los cómics, editoriales y reservas.
 
+Integrantes
+
+- Nibaldo Zepeda
+- Alexandro Pantelakos
+
 Tecnologías utilizadas
 
 -Python y Django
